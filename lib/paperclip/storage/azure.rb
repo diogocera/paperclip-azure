@@ -143,7 +143,7 @@ module Paperclip
 
       def obtain_azure_instance_for(options)
         instances = (Thread.current[:paperclip_azure_instances] ||= {})
-        return instances[options] if instance[options]
+        return instances[options] if instances[options]
 
         service = ::Azure::Storage::Blob::BlobService.new(client: azure_storage_client)
         service.with_filter ::Azure::Storage::Core::Filter::ExponentialRetryPolicyFilter.new
