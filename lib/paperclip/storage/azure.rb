@@ -152,11 +152,15 @@ module Paperclip
       end
 
       def azure_uri(style_name = default_style)
-        "https://#{azure_base_url}/#{container_name}/#{path(style_name).gsub(%r{\A/}, '')}"
+        "https://#{azure_base_url}/#{path(style_name).gsub(%r{\A/}, '')}"
       end
 
       def azure_base_url
-        Environment.url_for azure_account_name, azure_credentials[:region]
+        if @options[:alias_url]
+          @options[:alias_url]
+        else
+          Environment.url_for(azure_account_name, azure_credentials[:region]) + "/#{container_name}"
+        end
       end
 
       def azure_container
