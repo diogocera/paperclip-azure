@@ -168,7 +168,11 @@ module Paperclip
       end
 
       def azure_object(style_name = default_style)
-        azure_interface.get_blob_properties container_name, path(style_name).sub(%r{\A/},'')
+        begin
+          azure_interface.get_blob_properties container_name, path(style_name).sub(%r{\A/},'')
+        rescue
+          nil
+        end
       end
 
       def parse_credentials(creds)
@@ -208,8 +212,9 @@ module Paperclip
             end
           rescue ::Azure::Core::Http::HTTPError => e
             if e.status_code == 404
-              create_container
-              retry
+              # create_container
+              # retry
+              # ignore
             else
               raise
             end
